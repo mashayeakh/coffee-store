@@ -46,7 +46,7 @@ const CreateCoffee = () => {
                 }
                 return res.json();
             })
-            .then(data => {
+            .then(data => { 
 
                 if (data) {
                     alert(`Coffee Added successfully with id ${data.insertedId}`)

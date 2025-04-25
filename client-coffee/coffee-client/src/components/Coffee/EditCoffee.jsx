@@ -22,7 +22,9 @@ const EditCoffee = () => {
         }
         console.log("Edited Data - ", editedData);
 
+        // const url = `http://localhost:5000/edit/${data._id}`;
         const url = `http://localhost:5000/edit/${data._id}`;
+
         fetch(url, {
             method: 'PUT',
             headers: {
@@ -37,7 +39,6 @@ const EditCoffee = () => {
                     alert("Edited!!");
                 }
             })
-
     }
 
     return (

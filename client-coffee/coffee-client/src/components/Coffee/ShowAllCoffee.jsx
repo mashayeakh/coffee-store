@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
-import first from "../../assets/images/1.png";
-import nodata from "../../assets/images/nodata.gif";
+import React, { useContext, useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaPen } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { useNavigate, Link } from "react-router";
+import { Link } from "react-router";
 import Swal from "sweetalert2";
+import { AuthContext } from "../Context/AuthContextProvider";
 
 const ShowAllCoffee = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+
+
+    const { user } = useContext(AuthContext); // Or however you're managing auth
+
+
 
     const [coffees, setCoffees] = useState([]);
 
@@ -56,7 +60,7 @@ const ShowAllCoffee = () => {
         });
 
     }
-    console.log(coffees.length);
+    // console.log(coffees.length);
 
     const url = "http://localhost:5000/coffees";
 
@@ -103,27 +107,42 @@ const ShowAllCoffee = () => {
                                         <h5>Chef: {coffee.chef}</h5>
                                         <h5>Price: 890 Taka</h5>
                                     </p>
+
+
                                     <div className="flex flex-col">
+
                                         <Link to={`view-coffee/${coffee._id}`}>
-                                            <button
-                                                // onClick={handleViewCoffee}
-                                                className="btn btn-primary mb-2 bg-[#D2B48C]"
-                                            >
+                                            <button className="btn btn-primary mb-2 bg-[#D2B48C]">
                                                 <FaEye size={15} />
                                             </button>
                                         </Link>
+                                        {
 
-                                        <Link to={`edit/${coffee._id}`}>
-                                            <button className="btn btn-primary mb-2 bg-[#3C393B]">
-                                                <FaPen size={15} />
-                                            </button>
-                                        </Link>
+                                            user ? (
+                                                <div>
 
-                                        <button onClick={() => handleDelete(coffee?._id)} className="btn btn-primary bg-[#EA4744]">
-                                            <MdDelete size={20} />
-                                        </button>
+                                                    <Link to={`edit/${coffee._id}`}>
+                                                        <button className="btn btn-primary mb-2 bg-[#3C393B]">
+                                                            <FaPen size={15} />
+                                                        </button>
+                                                    </Link>
+
+                                                    <button onClick={() => handleDelete(coffee?._id)} className="btn btn-primary bg-[#EA4744]">
+                                                        <MdDelete size={20} />
+                                                    </button>
+                                                </div>
+
+                                            ) :
+                                                null
+                                        }
+
 
                                     </div>
+
+
+
+
+
                                 </div>
                             </div>
                         </div>

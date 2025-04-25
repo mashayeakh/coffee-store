@@ -38,11 +38,15 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
+
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         const database = client.db("CoffeeDB");
 
         const collection = database.collection("coffees");
+
+        //under CoffeeDB lets create another collection called users
+        const usersCollection = database.collection("users");
 
 
         //! post method
@@ -85,6 +89,8 @@ async function run() {
                 )
             }
         })
+
+        //----------------------------------------------------------------------
 
         //! get method to show a single coffee based on id.
         app.get("/specific-coffee/:id", async (req, res) => {
@@ -149,6 +155,7 @@ async function run() {
             res.send(result);
         })
 
+        //----------------------------------------------------------------------
 
         //! now delete an item from the database
         app.delete("/delete/:id", async (req, res) => {
@@ -165,6 +172,129 @@ async function run() {
                     res.send({ message: "No document found to delete" });
                 }
             }
+        })
+
+        //?---------------------------- USER ------------------------------------------
+
+        //! post method to create users 
+        app.post("/create-user", async (req, res) => {
+            //grab the full body 
+            const user = req.body;
+            console.log("User = ", user);
+
+            const result = await usersCollection.insertOne(user);
+
+            res.send(result);
+
+        })
+
+        //----------------------------------------------------------------------
+
+        //!get method to access all the uses
+        app.get("/users", async (req, res) => {
+            const cursor = usersCollection.find();
+            const users = await cursor.toArray();
+
+            if (users.length > 0) {
+                res.send(users);
+            } else {
+                res.send(
+                    {
+                        message: "No user found.",
+                        status: false,
+                    }
+                )
+            }
+        })
+
+        //------------------------------------------------------------------------
+
+        //!delete method to delete users
+        app.delete("/delete-user/:id", async (req, res) => {
+            const targetedId = req.params.id;
+            console.log("Targeted Id ", targetedId);
+
+            const query = { _id: new ObjectId(targetedId) };
+
+            const result = await usersCollection.deleteOne(query);
+
+            if (result.deletedCount === 1) {
+                res.send(result)
+            } else {
+                res.send(
+                    {
+                        message: "Not found!!",
+                        status: false,
+                    }
+                )
+            }
+
+        })
+
+        //------------------------------------------------------------------
+        //! get method to show thee edited user thn we will perform put method 
+        app.get("/edit-user/:id", async (req, res) => {
+
+            const editedId = req.params.id;
+            console.log("Edited Id = ", editedId);
+
+            const query = { _id: new ObjectId(editedId) };
+            const result = await usersCollection.findOne(query);
+
+            if (result) {
+                res.send(result);
+            } else {
+                res.send({
+                    message: "Not Found!!",
+                    status: false,
+                })
+            }
+        })
+
+        //! now its time to use put method to edit 
+        app.put("/edit-user/:id", async (req, res) => {
+            const editedId = req.params.id;
+
+            console.log("Edited ID :", editedId);
+
+            const filter = { _id: new ObjectId(editedId) };
+            const options = { upsert: true };
+
+            const updateUser = {
+                $set: {
+                    name: req.body.name,
+                    email: req.body.email
+                }
+            }
+
+            const result = await usersCollection.updateOne(filter, updateUser, options);
+            if (result) {
+                res.send(result);
+                console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+                );
+            } else {
+                res.send({
+                    message: "Not Found!!",
+                    status: false,
+                })
+            }
+        })
+
+        // //! Patch method to edit field of an existing user and it should be getting based on email
+        app.patch("/user", async (req, res) => {
+            const existingEmail = req?.body?.email;
+            console.log("Existing Email : ", existingEmail);
+
+            const filter = { email: existingEmail };
+            const updatedDoc = {
+                $set: {
+                    //update the field
+                    lastSignInTime: req?.body?.lastSignInTime,
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc);
+            console.log(result);
+            res.send(result);
         })
 
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
