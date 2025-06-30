@@ -1,12 +1,11 @@
-# React + Vite
+## Coffee Store Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is the frontend client for the Coffee Store application. It provides a user-friendly interface for browsing, ordering, and managing coffee products. Built with modern web technologies, the client communicates with a backend API to deliver a seamless coffee shopping experience.
 
-Currently, two official plugins are available:
+**Features:**
+- Browse a variety of coffee products
+- Add items to cart and place orders
+- User authentication and profile management
+- Responsive design for all devices
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Feel free to contribute or suggest improvements!

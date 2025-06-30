@@ -18,7 +18,7 @@ const EditCoffee = () => {
             taste: e.target.taste.value,
             category: e.target.category.value,
             details: e.target.details.value,
-            photoUrl: e.target.photoUrl.value,
+                photoUrl: e.target.photoUrl.value,
         }
         console.log("Edited Data - ", editedData);
 

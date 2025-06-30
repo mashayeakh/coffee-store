@@ -41,7 +41,7 @@ const ShowAllCoffee = () => {
                 fetch(url, {
                     method: "Delete",
                 })
-                    .then(res => res.json)
+                    .then(res => res.json())
                     .then(data => {
                         console.log("Data deleted", data);
                         if (data.deleteCount > 0) {
